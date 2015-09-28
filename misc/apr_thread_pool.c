@@ -67,6 +67,7 @@ struct apr_thread_pool
     volatile apr_size_t tasks_high;
     volatile apr_size_t thd_high;
     volatile apr_size_t thd_timed_out;
+    volatile apr_size_t spawning_cnt;
     struct apr_thread_pool_tasks *tasks;
     struct apr_thread_pool_tasks *scheduled_tasks;
     struct apr_thread_list *busy_thds;
@@ -131,6 +132,7 @@ static apr_status_t thread_pool_construct(apr_thread_pool_t * me,
     APR_RING_INIT(me->recycled_thds, apr_thread_list_elt, link);
     me->thd_cnt = me->idle_cnt = me->task_cnt = me->scheduled_task_cnt = 0;
     me->tasks_run = me->tasks_high = me->thd_high = me->thd_timed_out = 0;
+    me->spawning_cnt = 0;
     me->idle_wait = 0;
     me->terminated = 0;
     for (i = 0; i < TASK_PRIORITY_SEGS; i++) {
@@ -243,6 +245,9 @@ static void *APR_THREAD_FUNC thread_pool_func(apr_thread_t * t, void *param)
     struct apr_thread_list_elt *elt;
 
     apr_thread_mutex_lock(me->lock);
+
+    --me->spawning_cnt;
+
     elt = elt_new(me, t);
     if (!elt) {
         apr_thread_mutex_unlock(me->lock);
@@ -371,6 +376,7 @@ APU_DECLARE(apr_status_t) apr_thread_pool_create(apr_thread_pool_t ** me,
          * initial threads to create.
          */
         apr_thread_mutex_lock(tp->lock);
+        ++tp->spawning_cnt;
         rv = apr_thread_create(&t, NULL, thread_pool_func, tp, tp->pool);
         apr_thread_mutex_unlock(tp->lock);
         if (APR_SUCCESS != rv) {
@@ -564,10 +570,11 @@ static apr_status_t add_task(apr_thread_pool_t *me, apr_thread_start_t func,
     me->task_cnt++;
     if (me->task_cnt > me->tasks_high)
         me->tasks_high = me->task_cnt;
-    if (0 == me->thd_cnt || (0 == me->idle_cnt && me->thd_cnt < me->thd_max &&
+    if (0 == me->thd_cnt || ((me->task_cnt > (me->spawning_cnt + me->idle_cnt)) && me->thd_cnt < me->thd_max &&
                              me->task_cnt > me->threshold)) {
         rv = apr_thread_create(&thd, NULL, thread_pool_func, me, me->pool);
         if (APR_SUCCESS == rv) {
+            ++me->spawning_cnt;
             ++me->thd_cnt;
             if (me->thd_cnt > me->thd_high)
                 me->thd_high = me->thd_cnt;

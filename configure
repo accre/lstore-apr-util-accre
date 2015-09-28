@@ -24252,7 +24252,7 @@ lib_target=$APR_LIB_TARGET
 
 
 
-APRUTIL_LIBNAME="aprutil${libsuffix}"
+APRUTIL_LIBNAME="aprutil-ACCRE${libsuffix}"
 
 
 # Set up destination directory for DSOs.
@@ -24320,10 +24320,10 @@ case $host in
     *-mingw*)
         sed -e 's/-DAPR_DECLARE_EXPORT/-DAPU_DECLARE_EXPORT/' \
             -e 's/-DAPR_DECLARE_STATIC/-DAPU_DECLARE_STATIC -DAPR_DECLARE_STATIC/' \
-            < $APR_BUILD_DIR/apr_rules.mk > $abs_builddir/build/rules.mk
+            < $APR_BUILD_DIR/apr-ACCRE_rules.mk > $abs_builddir/build/rules.mk
         ;;
     *)
-        cp $APR_BUILD_DIR/apr_rules.mk $abs_builddir/build/rules.mk
+        cp $APR_BUILD_DIR/apr-ACCRE_rules.mk $abs_builddir/build/rules.mk
         ;;
 esac
 
@@ -24350,7 +24350,7 @@ for d in include include/private; do
     test -d $top_builddir/$d || mkdir $top_builddir/$d
 done
 
-ac_config_files="$ac_config_files Makefile export_vars.sh build/pkg/pkginfo apr-util.pc apu-$APRUTIL_MAJOR_VERSION-config:apu-config.in include/private/apu_select_dbm.h include/apr_ldap.h include/apu.h include/apu_want.h"
+ac_config_files="$ac_config_files Makefile export_vars.sh build/pkg/pkginfo apr-util.pc apu-ACCRE-$APRUTIL_MAJOR_VERSION-config:apu-config.in include/private/apu_select_dbm.h include/apr_ldap.h include/apu.h include/apu_want.h"
 
 
 ac_config_commands="$ac_config_commands default"
@@ -25067,7 +25067,7 @@ do
     "export_vars.sh") CONFIG_FILES="$CONFIG_FILES export_vars.sh" ;;
     "build/pkg/pkginfo") CONFIG_FILES="$CONFIG_FILES build/pkg/pkginfo" ;;
     "apr-util.pc") CONFIG_FILES="$CONFIG_FILES apr-util.pc" ;;
-    "apu-$APRUTIL_MAJOR_VERSION-config") CONFIG_FILES="$CONFIG_FILES apu-$APRUTIL_MAJOR_VERSION-config:apu-config.in" ;;
+    "apu-ACCRE-$APRUTIL_MAJOR_VERSION-config") CONFIG_FILES="$CONFIG_FILES apu-$APRUTIL_MAJOR_VERSION-config:apu-config.in" ;;
     "include/private/apu_select_dbm.h") CONFIG_FILES="$CONFIG_FILES include/private/apu_select_dbm.h" ;;
     "include/apr_ldap.h") CONFIG_FILES="$CONFIG_FILES include/apr_ldap.h" ;;
     "include/apu.h") CONFIG_FILES="$CONFIG_FILES include/apu.h" ;;
@@ -25630,7 +25630,7 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
 
   case $ac_file$ac_mode in
     "default":C)
-chmod +x apu-$APRUTIL_MAJOR_VERSION-config
+chmod +x apu-ACCRE-$APRUTIL_MAJOR_VERSION-config
  ;;
 
   esac
