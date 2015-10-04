@@ -3992,7 +3992,7 @@ fi
       apr_temp_acceptable_apr_config="$apr_temp_acceptable_apr_config apr-config"
       ;;
       *)
-      apr_temp_acceptable_apr_config="$apr_temp_acceptable_apr_config apr-$apr_temp_major-config"
+      apr_temp_acceptable_apr_config="$apr_temp_acceptable_apr_config apr-ACCRE-$apr_temp_major-config"
       ;;
     esac
   done
