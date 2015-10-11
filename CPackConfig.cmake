@@ -7,7 +7,7 @@ set(APPLICATION_VERSION_MAJOR 1)
 set(APPLICATION_VERSION_MINOR 5)
 set(APPLICATION_VERSION_PATCH 4)
 set(APPLICATION_VERSION "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}.${APPLICATION_VERSION_PATCH}")
-set(CPACK_INSTALL_COMMANDS "${CMAKE_CURRENT_LIST_DIR}/configure --prefix=/usr --includedir=/usr/include/apr-util-ACCRE-1 --with-apr=/usr/bin/apr-ACCRE-1-config" "make install")
+set(CPACK_INSTALL_COMMANDS "${CMAKE_CURRENT_LIST_DIR}/configure --prefix=/usr --includedir=/usr/include/apr-util-ACCRE-1 --with-installbuilddir=/usr/lib/apr-util-ACCRE-1/build --with-apr=/usr/bin/apr-ACCRE-1-config" "make install")
 
 ### general settings
 set(CPACK_PACKAGE_NAME ${APPLICATION_NAME})
